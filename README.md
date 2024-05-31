@@ -1,50 +1,40 @@
-# iRechargeTakeHomeTest API
+# MAILCHAT API
 
-The documentation for the iRechargeTakeHomeTest API.
+The documentation for the MAILCHAT API.
 
 ## Requirements:
+Home Assignment – Full Stack Developer
+1. Your assignment will be to develop a mail inbox application.
+2. It is preferable that you use React or Angular 2+, but you may use any other Javascript
+framework.
+3. You may style the app as you wish.
+4. Use a predefined user. Any other users will not show the messages.
+5. The top bar of the app should indicate how many unread messages are there and name
+of the user.
+6. The app will consist of 3 pages.
+7. Define the APIs separate document/YAML/Swagger/postman, that are going to be used in
+app.
+8. Data should be come from DB with API layer (Nodejs, PHP…)
 
-#### QUESTION TWO: API Development:
-
-You are to develop a small containerized service with an HTTP API using a framework of
-your choice. The system allows end users to purchase CABLE TV by allowing them to view a
-list of available providers and their packages. The intended API can be interfaced via HTTP
-and should provide the following endpoints:
-● /auth
-● GET /users
-● GET /providers
-● GET /providers/{slug}/packages
-Packages are provided as JSON files in the attached zip and need to be imported into the
-service once. The API should offer some basic authentication to authenticate a specific
-user at the ‘/auth’ endpoint. After a user is authenticated, the user should see user data
-at the `/users` endpoint, the providers at /providers (returns slug: unique provider
-identifier + name), and the /providers/{slug}/packages return the packages of a
-provider.
 
 ## Implementation
 
 \*\*Please note
-
-1. To run this project you will need Docker installed on your machine.
-2. The API does not include any form of payment processing or actual
-   purchase functionality. It only provides information about what products are available and how
-   to access it.
-
+1. To run this project you will need MYSQL & REDIS installed on your machine.
 
 ## Documentation
 
-The documentation for all endpoints implemented for the iRechargeTakeHomeTest API can be found here [https://documenter.getpostman.com/view/10671823/2sA3JM6gEW](https://documenter.getpostman.com/view/10671823/2sA3JM6gEW).
+The documentation for all endpoints implemented for the MAILCHAT API can be found here [https://documenter.getpostman.com/view/10671823/2sA3JM6gEW](https://documenter.getpostman.com/view/10671823/2sA3JM6gEW).
 
 ## Technologies
 
-iRechargeTakeHomeTest API is built using:
+MAILCHAT API is built using:
 
 - NodeJS (TypeScript) v20.10.0
-- POSTGRESSQL (Sequelise ORM)
+- MYSQL (Sequelise ORM)
 - Express Web Framework
 - NPM
 - Redis
-- Docker
 
 ## Endpoints
 
@@ -93,42 +83,26 @@ iRechargeTakeHomeTest API is built using:
 
 
 
-### Providers
+### Messages
 
-#### Get All Providers
+#### Get All Messages
 
-- **URL:** `http://localhost:7001/providers/`
+- **URL:** `http://localhost:7001/messages/`
 - **Method:** `GET`
-- **Description:** Retrieves all providers.
+- **Description:** Retrieves all messages.
 - **Authorization Required:** Yes
 
 
-#### Get Provider Packages
+#### Get User Messages
 
-- **URL:** `http://localhost:7001/providers/:slug/packages`
+- **URL:** `http://localhost:7001/messages/:userid`
 - **Method:** `GET`
-- **Description:** Retrieves packages for a specific provider.
+- **Description:** Retrieves Messages for a specific user.
 - **Authorization Required:** No
 
 
 
 ## Deployment
-
-### Docker Deployment
-
-#### Prerequisites
-
-- Docker installed on your machine.
-
-- Clone the repository to your local machine.
-
-```bash
-docker-compose up --build
-```
-
-#### BaseUrl
-http://localhost:7001
-
 
 ### Local Machine  Deployment
 
@@ -156,3 +130,6 @@ To execute the test suite, run the following command in your terminal or command
 To execute the start, run the following command in your terminal or command prompt:
 
 - `npm run start`
+
+#### BaseUrl
+http://localhost:7001
