@@ -24,7 +24,7 @@ app.
 
 ## Documentation
 
-The documentation for all endpoints implemented for the MAILCHAT API can be found here [https://documenter.getpostman.com/view/10671823/2sA3JM6gEW](https://documenter.getpostman.com/view/10671823/2sA3JM6gEW).
+The documentation for all endpoints implemented for the MAILCHAT API can be found here [https://documenter.getpostman.com/view/10671823/2sA3QwapCw](hhttps://documenter.getpostman.com/view/10671823/2sA3QwapCw).
 
 ## Technologies
 

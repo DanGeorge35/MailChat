@@ -2,7 +2,7 @@ import MessagesController from './messages.controller'
 import { Authorization } from '../../libs/utils/app.utility'
 import MessagesValidation from './messages.validation'
 
-const ENDPOINT_URL = '/users'
+const ENDPOINT_URL = '/messages'
 
 // Endpoint configuration for user-related routes
 const MessagesEndpoint = [
@@ -17,6 +17,13 @@ const MessagesEndpoint = [
   // ==============================================================================================
   {
     path: `${ENDPOINT_URL}/`,
+    method: 'get',
+    handler: [Authorization, MessagesController.getallMessages]
+  },
+
+  // ==============================================================================================
+  {
+    path: `${ENDPOINT_URL}/:userid/user`,
     method: 'get',
     handler: [Authorization, MessagesController.getallMessages]
   },

@@ -9,6 +9,7 @@ interface MessageAttributes {
   isRead: boolean
   fromUserID: number
   toUserID: number
+  createdAt?: Date
 }
 
 interface MessageCreationAttributes extends Optional<MessageAttributes, 'id'> {}
