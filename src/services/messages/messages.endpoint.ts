@@ -25,7 +25,7 @@ const MessagesEndpoint = [
   {
     path: `${ENDPOINT_URL}/:userid/user`,
     method: 'get',
-    handler: [Authorization, MessagesController.getallMessages]
+    handler: [Authorization, MessagesController.getAllUserMessages]
   },
 
   // ==============================================================================================

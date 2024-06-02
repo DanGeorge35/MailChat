@@ -42,7 +42,8 @@ Message.init(
     },
     isRead: {
       type: new DataTypes.BOOLEAN(),
-      allowNull: false
+      allowNull: false,
+      defaultValue: false
     },
     fromUserID: {
       type: DataTypes.INTEGER,

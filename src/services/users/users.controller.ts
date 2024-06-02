@@ -5,6 +5,7 @@ import { User } from '../../models/user.model'
 import { getOrSetCache } from '../../config/redis'
 import { type IResponse, createSuccessResponse, createErrorResponse, serverError, sendResponse } from '../../libs/helpers/response.helper'
 import { type Request, type Response } from 'express'
+import { Op } from 'sequelize'
 
 const CACHE_EXPIRATION = 120
 
@@ -170,6 +171,55 @@ class UserController {
 
       // Send success response with pagination data
       const successResponse: IResponse = createSuccessResponse(dresult)
+      successResponse.pagination = {
+        currentPage: page,
+        totalPages,
+        pageSize: PAGE_SIZE
+      }
+      sendResponse(res, successResponse)
+    } catch (error: any) {
+      // Send server error response
+      sendResponse(res, serverError(error.message))
+    }
+  }
+
+  // ==============================================================================================
+  /**
+   * Gets all users with pagination.
+   *
+   * @param {Request} req - The request object.
+   * @param {Response} res - The response object.
+   * @returns {Promise<void>} A promise that resolves to void.
+   */
+  static async findUsers (req: Request, res: Response): Promise<void> {
+    const PAGE_SIZE = 10
+
+    try {
+      let page: number = 1
+      const requestQuery: string = req.query.page as string ?? ''
+
+      // Parse page number from query parameters
+      if (requestQuery.length > 0) {
+        page = parseInt(requestQuery, 10)
+      }
+      const { search } = req.params
+
+      const allUser = await User.findAndCountAll({
+        where: {
+          [Op.or]: [
+            { name: { [Op.like]: `%${search}%` } },
+            { email: { [Op.like]: `%${search}%` } }
+          ]
+        },
+        limit: PAGE_SIZE,
+        offset: (page - 1) * PAGE_SIZE,
+        order: [['name', 'ASC']] // Ordering by name in ascending order
+      })
+
+      const totalPages = Math.ceil(allUser.count / PAGE_SIZE)
+
+      // Send success response with pagination data
+      const successResponse: IResponse = createSuccessResponse(allUser)
       successResponse.pagination = {
         currentPage: page,
         totalPages,

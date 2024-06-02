@@ -22,6 +22,12 @@ const UsersEndpoint = [
 
   // ==============================================================================================
   {
+    path: `${ENDPOINT_URL}/:search/findusers`,
+    method: 'get',
+    handler: [Authorization, UsersController.findUsers]
+  },
+  // ==============================================================================================
+  {
     path: `${ENDPOINT_URL}/`,
     method: 'get',
     handler: [Authorization, UsersController.getallUsers]

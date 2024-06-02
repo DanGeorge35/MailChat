@@ -4,11 +4,9 @@ import { createErrorResponse, sendResponse } from '../../libs/helpers/response.h
 
 const messageCreateSchema = Joi.object({
   subject: Joi.string().required().min(1),
-  content: Joi.string().required().min(1)
-})
-
-const messageUpdateSchema = Joi.object({
-  name: Joi.string().required().min(1)
+  content: Joi.string().required().min(1),
+  toUserID: Joi.string().required().min(1),
+  fromUserID: Joi.string().required().min(1)
 })
 
 interface ValidationResult {
@@ -36,26 +34,6 @@ class MessagesValidation {
    */
   static async validateCreateMessages (req: Request, res: Response, next: NextFunction): Promise<void> {
     const { error, value } = messageCreateSchema.validate(req.body)
-    const validate = checkValidation(error, value)
-    if (validate.result === 'error') {
-      const resp = createErrorResponse(400, validate.message)()
-      sendResponse(res, resp)
-      res.end()
-      return
-    }
-    next()
-  }
-
-  /**
-   * Validates message update request.
-   *
-   * @param {Request} req - The request object.
-   * @param {Response} res - The response object.
-   * @param {NextFunction} next - The next middleware function.
-   * @returns {void}
-   */
-  static async validateUpdateMessages (req: Request, res: Response, next: NextFunction): Promise<void> {
-    const { error, value } = messageUpdateSchema.validate(req.body)
     const validate = checkValidation(error, value)
     if (validate.result === 'error') {
       const resp = createErrorResponse(400, validate.message)()
