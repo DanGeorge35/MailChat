@@ -118,7 +118,7 @@ class MessageController {
    * @returns {Promise<void>} A promise that resolves to void.
    */
   static async getAllUserMessages (req: Request, res: Response): Promise<void> {
-    const PAGE_SIZE = 15
+    const PAGE_SIZE = 25
 
     const { userid } = req.params
     try {

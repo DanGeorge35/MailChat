@@ -95,10 +95,10 @@ MAILCHAT API is built using:
 
 #### Get User Messages
 
-- **URL:** `http://localhost:7001/messages/:userid`
+- **URL:** `http://localhost:7001/messages/:userid/user`
 - **Method:** `GET`
 - **Description:** Retrieves Messages for a specific user.
-- **Authorization Required:** No
+- **Authorization Required:** Yes
 
 
 
