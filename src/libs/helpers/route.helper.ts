@@ -11,7 +11,16 @@ class RouteHelper {
     router.get('/', (req: any, res: any) => {
       res.setHeader('content-type', 'application/json')
       const report = {
-        message: 'Welcome to IRechargeTest',
+        message: 'Welcome to MAILCHAT',
+        code: 200
+      }
+      res.status(200).send(report)
+    })
+
+    router.get('/index.php', (req: any, res: any) => {
+      res.setHeader('content-type', 'application/json')
+      const report = {
+        message: 'Welcome to MAILCHAT',
         code: 200
       }
       res.status(200).send(report)
