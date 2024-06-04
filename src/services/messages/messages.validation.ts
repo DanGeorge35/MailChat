@@ -5,8 +5,7 @@ import { createErrorResponse, sendResponse } from '../../libs/helpers/response.h
 const messageCreateSchema = Joi.object({
   subject: Joi.string().required().min(1),
   content: Joi.string().required().min(1),
-  toUserID: Joi.string().required().min(1),
-  fromUserID: Joi.string().required().min(1)
+  email: Joi.string().required().min(1)
 })
 
 interface ValidationResult {

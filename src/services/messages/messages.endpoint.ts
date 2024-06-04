@@ -11,7 +11,7 @@ const MessagesEndpoint = [
   {
     path: `${ENDPOINT_URL}/`,
     method: 'post',
-    handler: [MessagesValidation.validateCreateMessages, MessagesController.createMessage]
+    handler: [Authorization, MessagesValidation.validateCreateMessages, MessagesController.createMessage]
   },
 
   // ==============================================================================================

@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-extraneous-class */
 import dotenv from 'dotenv'
 import { Message, type MessageAttributes } from '../../models/messages.model'
+import { User } from '../../models/user.model'
 import { type IResponse, createSuccessResponse, createErrorResponse, serverError, sendResponse } from '../../libs/helpers/response.helper'
 import { type Request, type Response } from 'express'
 import { Op } from 'sequelize'
@@ -18,10 +19,13 @@ class MessageController {
    * @param {Response} res - The response object.
    * @returns {Promise<void>} A promise that resolves to void.
    */
-  static async createMessage (req: Request, res: Response): Promise<void> {
+  static async createMessage (req: any, res: Response): Promise<void> {
     try {
+      const user = req.user.data
       const data = req.body
-
+      const toUser = await User.findOne({ where: { email: data.email } })
+      data.toUserID = toUser?.dataValues.id
+      data.fromUserID = user.id
       // Create the message
       const message: MessageAttributes = await Message.create(data)
 
