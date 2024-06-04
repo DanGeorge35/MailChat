@@ -11,6 +11,9 @@ const CACHE_EXPIRATION = 120
 
 // Load environment variables from .env file
 dotenv.config()
+interface AuthRequest extends Request {
+  user?: any
+}
 
 // Controller class for managing user-related operations
 class UserController {
@@ -146,7 +149,58 @@ class UserController {
    * @param {Response} res - The response object.
    * @returns {Promise<void>} A promise that resolves to void.
    */
-  static async getallUsers (req: Request, res: Response): Promise<void> {
+  static async getallOtherUsers (req: AuthRequest, res: Response): Promise<void> {
+    const user = req.user.data
+    const PAGE_SIZE = 10
+
+    try {
+      let page: number = 1
+      const requestQuery: string = req.query.page as string ?? ''
+
+      // Parse page number from query parameters
+      if (requestQuery.length > 0) {
+        page = parseInt(requestQuery, 10)
+      }
+
+      // Get users data from cache or database with pagination
+      const dresult = await getOrSetCache(`users?page=${page}`, CACHE_EXPIRATION, async () => {
+        const allUser = await User.findAndCountAll({
+          where: {
+            email: {
+              [Op.ne]: user.email // Exclude the current user's email
+            }
+          },
+          limit: PAGE_SIZE,
+          offset: (page - 1) * PAGE_SIZE
+        })
+        return allUser
+      })
+
+      const totalPages = Math.ceil(dresult.count / PAGE_SIZE)
+
+      // Send success response with pagination data
+      const successResponse: IResponse = createSuccessResponse(dresult)
+      successResponse.pagination = {
+        currentPage: page,
+        totalPages,
+        pageSize: PAGE_SIZE
+      }
+      sendResponse(res, successResponse)
+    } catch (error: any) {
+      // Send server error response
+      sendResponse(res, serverError(error.message))
+    }
+  }
+
+  // ==============================================================================================
+  /**
+   * Gets all users with pagination.
+   *
+   * @param {Request} req - The request object.
+   * @param {Response} res - The response object.
+   * @returns {Promise<void>} A promise that resolves to void.
+   */
+  static async getallUsers (req: AuthRequest, res: Response): Promise<void> {
     const PAGE_SIZE = 10
 
     try {

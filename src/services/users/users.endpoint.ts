@@ -19,13 +19,19 @@ const UsersEndpoint = [
     method: 'post',
     handler: [UsersValidation.validateCreateUsers, UsersController.createUser]
   },
-
+  // ==============================================================================================
+  {
+    path: `${ENDPOINT_URL}/otherusers`,
+    method: 'get',
+    handler: [Authorization, UsersController.getallOtherUsers]
+  },
   // ==============================================================================================
   {
     path: `${ENDPOINT_URL}/:search/findusers`,
     method: 'get',
     handler: [Authorization, UsersController.findUsers]
   },
+
   // ==============================================================================================
   {
     path: `${ENDPOINT_URL}/`,

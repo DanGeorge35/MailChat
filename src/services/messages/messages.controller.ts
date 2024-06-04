@@ -9,6 +9,10 @@ import { Op } from 'sequelize'
 // Load environment variables from .env file
 dotenv.config()
 
+interface AuthRequest extends Request {
+  user?: any
+}
+
 // Controller class for managing message-related operations
 class MessageController {
   // ==============================================================================================
@@ -19,7 +23,7 @@ class MessageController {
    * @param {Response} res - The response object.
    * @returns {Promise<void>} A promise that resolves to void.
    */
-  static async createMessage (req: any, res: Response): Promise<void> {
+  static async createMessage (req: AuthRequest, res: Response): Promise<void> {
     try {
       const user = req.user.data
       const data = req.body
