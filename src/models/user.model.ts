@@ -53,10 +53,4 @@ User.init(
   }
 )
 
-User.sync({ alter: true })
-  .then(() => {})
-  .catch((err: Error) => {
-    console.error('Error creating User table:', err)
-  })
-
 export { User, type UserCreationAttributes, type UserAttributes }

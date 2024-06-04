@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-extraneous-class */
 import dotenv from 'dotenv'
-import { Message, type MessageAttributes } from '../../models/messages.model'
-import { User } from '../../models/user.model'
+import { Message, type MessageAttributes } from '../../models/'
+import { User } from '../../models/'
 import { type IResponse, createSuccessResponse, createErrorResponse, serverError, sendResponse } from '../../libs/helpers/response.helper'
 import { type Request, type Response } from 'express'
 import { Op } from 'sequelize'
@@ -56,7 +56,21 @@ class MessageController {
 
       // Get message data from cache or database
 
-      const singleMessage = await Message.findOne({ where: { id } })
+      const singleMessage = await Message.findOne({
+        where: { id },
+        include: [
+          {
+            model: User,
+            as: 'toUserInfo',
+            attributes: ['id', 'email', 'name'] // Adjust the attributes as needed
+          },
+          {
+            model: User,
+            as: 'fromUserInfo',
+            attributes: ['id', 'email', 'name'] // Adjust the attributes as needed
+          }
+        ]
+      })
 
       // Check if message exists
       if (singleMessage == null) {
@@ -96,15 +110,27 @@ class MessageController {
 
       // Get messages data from cache or database with pagination
 
-      const allMessage = await Message.findAndCountAll({
-        limit: PAGE_SIZE,
-        offset: (page - 1) * PAGE_SIZE
-      })
+      const allMessages = await Message.findAndCountAll({
 
-      const totalPages = Math.ceil(allMessage.count / PAGE_SIZE)
+        limit: PAGE_SIZE,
+        offset: (page - 1) * PAGE_SIZE,
+        include: [
+          {
+            model: User,
+            as: 'toUserInfo',
+            attributes: ['id', 'email', 'name'] // Adjust the attributes as needed
+          },
+          {
+            model: User,
+            as: 'fromUserInfo',
+            attributes: ['id', 'email', 'name'] // Adjust the attributes as needed
+          }
+        ]
+      })
+      const totalPages = Math.ceil(allMessages.count / PAGE_SIZE)
 
       // Send success response with pagination data
-      const successResponse: IResponse = createSuccessResponse(allMessage)
+      const successResponse: IResponse = createSuccessResponse(allMessages)
       successResponse.pagination = {
         currentPage: page,
         totalPages,
@@ -140,7 +166,7 @@ class MessageController {
 
       // Get messages data from cache or database with pagination
 
-      const allMessage = await Message.findAndCountAll({
+      const allMessages = await Message.findAndCountAll({
         where: {
           [Op.or]: [
             { toUserID: userid },
@@ -148,13 +174,25 @@ class MessageController {
           ]
         },
         limit: PAGE_SIZE,
-        offset: (page - 1) * PAGE_SIZE
+        offset: (page - 1) * PAGE_SIZE,
+        include: [
+          {
+            model: User,
+            as: 'toUserInfo',
+            attributes: ['id', 'email', 'name'] // Adjust the attributes as needed
+          },
+          {
+            model: User,
+            as: 'fromUserInfo',
+            attributes: ['id', 'email', 'name'] // Adjust the attributes as needed
+          }
+        ]
       })
 
-      const totalPages = Math.ceil(allMessage.count / PAGE_SIZE)
+      const totalPages = Math.ceil(allMessages.count / PAGE_SIZE)
 
       // Send success response with pagination data
-      const successResponse: IResponse = createSuccessResponse(allMessage)
+      const successResponse: IResponse = createSuccessResponse(allMessages)
       successResponse.pagination = {
         currentPage: page,
         totalPages,

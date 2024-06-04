@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-extraneous-class */
 import dotenv from 'dotenv'
 import { EncryptPassword, GenerateToken, CheckPassword } from '../../libs/utils/app.utility'
-import { User } from '../../models/user.model'
+import { User } from '../../models'
 import { getOrSetCache } from '../../config/redis'
 import { type IResponse, createSuccessResponse, createErrorResponse, serverError, sendResponse } from '../../libs/helpers/response.helper'
 import { type Request, type Response } from 'express'

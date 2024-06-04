@@ -60,10 +60,4 @@ Message.init(
   }
 )
 
-Message.sync({ alter: true })
-  .then(() => {})
-  .catch((err: Error) => {
-    console.error('Error creating Event table:', err)
-  })
-
 export { Message, type MessageCreationAttributes, type MessageAttributes }
