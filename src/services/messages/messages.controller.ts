@@ -145,6 +145,122 @@ class MessageController {
 
   // ==============================================================================================
   /**
+   * Gets all User Sent messages with pagination.
+   *
+   * @param {Request} req - The request object.
+   * @param {Response} res - The response object.
+   * @returns {Promise<void>} A promise that resolves to void.
+   */
+  static async getAllUserSentMessages (req: AuthRequest, res: Response): Promise<void> {
+    const PAGE_SIZE = 25
+
+    const { userid } = req.params
+    try {
+      let page: number = 1
+      const requestQuery: string = req.query.page as string ?? ''
+
+      // Parse page number from query parameters
+      if (requestQuery.length > 0) {
+        page = parseInt(requestQuery, 10)
+      }
+
+      // Get messages data from cache or database with pagination
+
+      const allMessages = await Message.findAndCountAll({
+        where: {
+          fromUserID: userid
+        },
+        limit: PAGE_SIZE,
+        offset: (page - 1) * PAGE_SIZE,
+        include: [
+          {
+            model: User,
+            as: 'toUserInfo',
+            attributes: ['id', 'email', 'name'] // Adjust the attributes as needed
+          },
+          {
+            model: User,
+            as: 'fromUserInfo',
+            attributes: ['id', 'email', 'name'] // Adjust the attributes as needed
+          }
+        ]
+      })
+      const totalPages = Math.ceil(allMessages.count / PAGE_SIZE)
+
+      // Send success response with pagination data
+      const successResponse: IResponse = createSuccessResponse(allMessages)
+      successResponse.pagination = {
+        currentPage: page,
+        totalPages,
+        pageSize: PAGE_SIZE
+      }
+      sendResponse(res, successResponse)
+    } catch (error: any) {
+      // Send server error response
+      sendResponse(res, serverError(error.message))
+    }
+  }
+
+  // ==============================================================================================
+  /**
+   * Gets all User Inbox messages with pagination.
+   *
+   * @param {Request} req - The request object.
+   * @param {Response} res - The response object.
+   * @returns {Promise<void>} A promise that resolves to void.
+   */
+  static async getAllUserInboxMessages (req: AuthRequest, res: Response): Promise<void> {
+    const PAGE_SIZE = 25
+
+    const { userid } = req.params
+    try {
+      let page: number = 1
+      const requestQuery: string = req.query.page as string ?? ''
+
+      // Parse page number from query parameters
+      if (requestQuery.length > 0) {
+        page = parseInt(requestQuery, 10)
+      }
+
+      // Get messages data from cache or database with pagination
+
+      const allMessages = await Message.findAndCountAll({
+        where: {
+          toUserID: userid
+        },
+        limit: PAGE_SIZE,
+        offset: (page - 1) * PAGE_SIZE,
+        include: [
+          {
+            model: User,
+            as: 'toUserInfo',
+            attributes: ['id', 'email', 'name'] // Adjust the attributes as needed
+          },
+          {
+            model: User,
+            as: 'fromUserInfo',
+            attributes: ['id', 'email', 'name'] // Adjust the attributes as needed
+          }
+        ]
+      })
+      const totalPages = Math.ceil(allMessages.count / PAGE_SIZE)
+
+      // Send success response with pagination data
+      const successResponse: IResponse = createSuccessResponse(allMessages)
+      successResponse.pagination = {
+        currentPage: page,
+        totalPages,
+        pageSize: PAGE_SIZE
+      }
+      sendResponse(res, successResponse)
+    } catch (error: any) {
+      // Send server error response
+      sendResponse(res, serverError(error.message))
+    }
+  }
+
+  // ==============================================================================================
+  /**
    * Gets all messages with pagination.
    *
    * @param {Request} req - The request object.

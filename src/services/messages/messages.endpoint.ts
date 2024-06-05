@@ -20,6 +20,18 @@ const MessagesEndpoint = [
     method: 'get',
     handler: [Authorization, MessagesController.getallMessages]
   },
+  // ==============================================================================================
+  {
+    path: `${ENDPOINT_URL}/:userid/user/sent`,
+    method: 'get',
+    handler: [Authorization, MessagesController.getAllUserSentMessages]
+  },
+  // ==============================================================================================
+  {
+    path: `${ENDPOINT_URL}/:userid/user/inbox`,
+    method: 'get',
+    handler: [Authorization, MessagesController.getAllUserInboxMessages]
+  },
 
   // ==============================================================================================
   {

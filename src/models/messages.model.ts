@@ -37,7 +37,7 @@ Message.init(
       allowNull: false
     },
     content: {
-      type: new DataTypes.STRING(),
+      type: new DataTypes.TEXT(),
       allowNull: false
     },
     isRead: {

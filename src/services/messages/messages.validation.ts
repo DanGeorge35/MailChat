@@ -3,7 +3,7 @@ import { type Request, type Response, type NextFunction } from 'express'
 import { createErrorResponse, sendResponse } from '../../libs/helpers/response.helper'
 
 const messageCreateSchema = Joi.object({
-  subject: Joi.string().required().min(1),
+  subject: Joi.string().required().min(1).max(100),
   content: Joi.string().required().min(1),
   email: Joi.string().required().min(1)
 })
