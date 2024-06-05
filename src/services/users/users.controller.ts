@@ -163,23 +163,21 @@ class UserController {
       }
 
       // Get users data from cache or database with pagination
-      const dresult = await getOrSetCache(`users?page=${page}`, CACHE_EXPIRATION, async () => {
-        const allUser = await User.findAndCountAll({
-          where: {
-            email: {
-              [Op.ne]: user.email // Exclude the current user's email
-            }
-          },
-          limit: PAGE_SIZE,
-          offset: (page - 1) * PAGE_SIZE
-        })
-        return allUser
+
+      const allUser = await User.findAndCountAll({
+        where: {
+          email: {
+            [Op.ne]: user.email // Exclude the current user's email
+          }
+        },
+        limit: PAGE_SIZE,
+        offset: (page - 1) * PAGE_SIZE
       })
 
-      const totalPages = Math.ceil(dresult.count / PAGE_SIZE)
+      const totalPages = Math.ceil(allUser.count / PAGE_SIZE)
 
       // Send success response with pagination data
-      const successResponse: IResponse = createSuccessResponse(dresult)
+      const successResponse: IResponse = createSuccessResponse(allUser)
       successResponse.pagination = {
         currentPage: page,
         totalPages,
