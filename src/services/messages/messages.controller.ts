@@ -266,6 +266,42 @@ class MessageController {
 
   // ==============================================================================================
   /**
+   * Gets all User Notification messages with pagination.
+   *
+   * @param {Request} req - The request object.
+   * @param {Response} res - The response object.
+   * @returns {Promise<void>} A promise that resolves to void.
+   */
+  static async getUserMessageMetrics (req: Request, res: Response): Promise<void> {
+    const { userid } = req.params
+    try {
+      // Get messages data from cache or database with pagination
+
+      const Unread = await Message.count({
+        where: {
+          toUserID: userid,
+          isRead: false
+        }
+      })
+
+      const Total = await Message.count({
+        where: {
+          toUserID: userid
+        }
+      })
+      const Metric = { Total, Unread }
+      // Send success response with pagination data
+      const successResponse: IResponse = createSuccessResponse({ Metric })
+
+      sendResponse(res, successResponse)
+    } catch (error: any) {
+      // Send server error response
+      sendResponse(res, serverError(error.message))
+    }
+  }
+
+  // ==============================================================================================
+  /**
    * Gets all messages with pagination.
    *
    * @param {Request} req - The request object.

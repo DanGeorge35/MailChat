@@ -23,6 +23,7 @@ export interface IResponse {
   message: string
   data: any
   token?: any
+  metric?: any
   pagination?: PaginationData
 }
 

@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-extraneous-class */
 import dotenv from 'dotenv'
 import { EncryptPassword, GenerateToken, CheckPassword } from '../../libs/utils/app.utility'
-import { User } from '../../models'
+import { User, Message } from '../../models'
 import { getOrSetCache } from '../../config/redis'
 import { type IResponse, createSuccessResponse, createErrorResponse, serverError, sendResponse } from '../../libs/helpers/response.helper'
 import { type Request, type Response } from 'express'
@@ -97,9 +97,24 @@ class UserController {
       // Generate authentication token
       const token = GenerateToken(user)
 
+      const Unread = await Message.count({
+        where: {
+          toUserID: user.dataValues.id,
+          isRead: false
+        }
+      })
+
+      const Total = await Message.count({
+        where: {
+          toUserID: user.dataValues.id
+        }
+      })
+      const Metric = { Total, Unread }
+
       // Send success response with token
       const successResponse: IResponse = createSuccessResponse(user, 200)
       successResponse.token = token
+      successResponse.metric = Metric
       sendResponse(res, successResponse)
     } catch (error: any) {
       // Send server error response
