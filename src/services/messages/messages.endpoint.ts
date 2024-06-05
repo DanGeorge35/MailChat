@@ -44,7 +44,7 @@ const MessagesEndpoint = [
   {
     path: `${ENDPOINT_URL}/:id`,
     method: 'get',
-    handler: [MessagesController.getSingleMessage]
+    handler: [Authorization, MessagesController.getSingleMessage]
   }
 ]
 

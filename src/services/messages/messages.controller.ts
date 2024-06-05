@@ -50,9 +50,10 @@ class MessageController {
    * @param {Response} res - The response object.
    * @returns {Promise<void>} A promise that resolves to void.
    */
-  static async getSingleMessage (req: Request, res: Response): Promise<void> {
+  static async getSingleMessage (req: AuthRequest, res: Response): Promise<void> {
     try {
       const { id } = req.params
+      const user = req.user.data
 
       // Get message data from cache or database
 
@@ -71,6 +72,10 @@ class MessageController {
           }
         ]
       })
+
+      if (singleMessage?.dataValues.toUserID === user.id) {
+        await singleMessage?.update({ isRead: true })
+      }
 
       // Check if message exists
       if (singleMessage == null) {
